@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.0.2)
+
+project(s2-geometry-download NONE)
+include(ExternalProject)
+
+ExternalProject_Add(
+  s2-geometry
+  GIT_REPOSITORY https://github.com/yjwong/s2-geometry-library.git
+  GIT_TAG master
+  SOURCE_DIR "${CMAKE_BINARY_DIR}/s2-geometry-src"
+  BINARY_DIR "${CMAKE_BINARY_DIR}/s2-geometry-build"
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ""
+  INSTALL_COMMAND ""
+  TEST_COMMAND ""
+)

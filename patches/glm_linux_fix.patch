@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8af3ad7..b8cdc07 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -93,6 +93,10 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+ 	add_definitions(-Wno-undefined-reinterpret-cast -Wno-sign-conversion -Wno-unused-variable -Wno-missing-prototypes -Wno-unreachable-code -Wno-missing-variable-declarations -Wno-sign-compare -Wno-global-constructors -Wno-unused-macros -Wno-format-nonliteral)
+ endif()
+ 
++if(LINUX)
++	add_definitions(-Wno-long-long)
++endif()
++
+ option(GLM_TEST_ENABLE_LANG_EXTENSIONS "Enable language extensions" OFF)
+ 
+ if(GLM_TEST_ENABLE_LANG_EXTENSIONS)

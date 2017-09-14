@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.0.2)
+
+project(proj4-download NONE)
+include(ExternalProject)
+
+ExternalProject_Add(
+  proj4
+  GIT_REPOSITORY https://github.com/OSGeo/proj.4.git
+  GIT_TAG master
+  SOURCE_DIR "${CMAKE_BINARY_DIR}/proj4-src"
+  BINARY_DIR "${CMAKE_BINARY_DIR}/proj4-build"
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ""
+  INSTALL_COMMAND ""
+  TEST_COMMAND ""
+)

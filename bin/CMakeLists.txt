@@ -1,0 +1,12 @@
+find_package(Qt5Widgets REQUIRED)
+include_directories(${Qt5Widgets_INCLUDE_DIRS})
+include_directories(${Qt5OpenGL_INCLUDE_DIRS})
+
+add_subdirectory(indexed_rainbow_rectangle)
+add_subdirectory(indexed_rainbow_sphere)
+add_subdirectory(indexed_rainbow_textured_rectangle)
+add_subdirectory(multi_textured_rectangle)
+add_subdirectory(projected_textured_rectangle)
+add_subdirectory(rainbow_triangle)
+add_subdirectory(simple_triangle)
+

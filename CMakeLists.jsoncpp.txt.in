@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.0.2)
+
+project(jsoncpp-download NONE)
+include(ExternalProject)
+
+ExternalProject_Add(
+  jsoncpp
+  GIT_REPOSITORY https://github.com/open-source-parsers/jsoncpp.git
+  GIT_TAG master
+  SOURCE_DIR "${CMAKE_BINARY_DIR}/jsoncpp-src"
+  BINARY_DIR "${CMAKE_BINARY_DIR}/jsoncpp-build"
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ""
+  INSTALL_COMMAND ""
+  TEST_COMMAND ""
+)
