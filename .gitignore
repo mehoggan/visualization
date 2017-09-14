@@ -6,4 +6,5 @@
 .idea/
 cmake-build-debug/
 tags/
+./tags
 *.user

@@ -48,28 +48,57 @@ namespace com
       sphere::ebo_type::collection_type
     > sphere::generate()
     {
+      std::vector<vbo_type::datum_type> vector_data = {
+        vbo_type::datum_type( // 0
+          opengl_math::point_3d<float>(+0.0f, -1.0f, +0.0f),
+          opengl_math::color_rgb<float>(+1.0f, +0.0f, +0.0f)
+        ),
+        vbo_type::datum_type( // 1
+          opengl_math::point_3d<float>(+1.0f, +0.0f, +0.0f),
+          opengl_math::color_rgb<float>(+0.0f, +1.0f, +0.0f)
+        ),
+        vbo_type::datum_type( // 2
+          opengl_math::point_3d<float>(+0.0f, +0.0f, -1.0f),
+          opengl_math::color_rgb<float>(+0.0f, +0.0f, +1.0f)
+        ),
+        vbo_type::datum_type( // 3
+          opengl_math::point_3d<float>(-1.0f, +0.0f, +0.0f),
+          opengl_math::color_rgb<float>(+1.0f, +0.0f, +1.0f)
+        ),
+        vbo_type::datum_type( // 4
+          opengl_math::point_3d<float>(+0.0f, +0.0f, +1.0f),
+          opengl_math::color_rgb<float>(+1.0f, +1.0f, +0.0f)
+        ),
+        vbo_type::datum_type( // 5
+          opengl_math::point_3d<float>(+0.0f, +1.0f, +0.0f),
+          opengl_math::color_rgb<float>(+0.0f, +1.0f, +1.0f)
+        )
+      };
       sphere::vbo_type::collection_type data(
-        new vbo_type::datum_type[total_verts_]);
-      data[0] = vbo_type::datum_type(
-        opengl_math::point_3d<float>(-0.5f, +0.5f, +0.5f),
-        opengl_math::color_rgb<float>(+1.0f, +0.0f, +0.0f));
-      data[1] = vbo_type::datum_type(
-        opengl_math::point_3d<float>(+0.5f, +0.5f, +0.5f),
-        opengl_math::color_rgb<float>(+0.0f, +1.0f, +0.0f));
-      data[2] = vbo_type::datum_type(
-        opengl_math::point_3d<float>(+0.5f, -0.5f, +0.5f),
-        opengl_math::color_rgb<float>(+0.0f, +0.0f, +1.0f));
-      data[3] = vbo_type::datum_type(
-        opengl_math::point_3d<float>(-0.5f, -0.5f, +0.5f),
-        opengl_math::color_rgb<float>(+1.0f, +1.0f, +1.0f));
+        new vbo_type::datum_type[vector_data.size()]);
+      for (std::size_t i = 0; i < vector_data.size(); ++i) {
+        data[i] = vector_data[i];
+      }
+      data[1] = vector_data[1];
+      data[2] = vector_data[2];
+      data[3] = vector_data[3];
+      data[4] = vector_data[4];
+      data[5] = vector_data[5];
 
-      ebo_type::collection_type indic(new uint32_t[total_elements_]);
-      indic[0] = 0u;
-      indic[1] = 1u;
-      indic[2] = 2u;
-      indic[3] = 2u;
-      indic[4] = 3u;
-      indic[5] = 0u;
+      std::vector<uint32_t> vector_indic = {
+        0u, 1u, 4u,
+        0u, 1u, 2u,
+        0u, 3u, 2u,
+        0u, 4u, 3u,
+        4u, 1u, 5u,
+        1u, 2u, 5u,
+        2u, 3u, 5u,
+        3u, 4u, 5u
+      };
+      ebo_type::collection_type indic(new uint32_t[vector_indic.size()]);
+      for (std::size_t i = 0; i < vector_data.size(); ++i) {
+        indic[i] = vector_indic[i];
+      }
 
       return std::make_pair(data, indic);
     }

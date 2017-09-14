@@ -62,7 +62,7 @@ namespace com
         glm::vec3(+0.0f, +1.0f, +0.0f));
 
       proj_ = glm::perspective(glm::radians(45.0f),
-        width_ / height_ * retina_scale_, 0.2f, 10.0f);
+        width_ / height_ * retina_scale_, 0.2f, 1000000.0f);
 
       sphere_->compute_and_set_mvp_matrix(gl_functions, proj_, view_);
     }
