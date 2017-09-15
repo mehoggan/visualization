@@ -19,6 +19,7 @@
 #include <QOpenGLShaderProgram>
 
 #include <atomic>
+#include <tuple>
 
 #ifdef __APPLE__
   #include <OpenGL/gl.h>
@@ -58,9 +59,11 @@ namespace com
       > vbo_type;
       typedef opengl_graphics::indices<uint32_t> ebo_type;
 
-      std::pair<
+      std::tuple<
         vbo_type::collection_type,
-        ebo_type::collection_type
+        std::size_t,
+        ebo_type::collection_type,
+        std::size_t
       > generate();
 
     private:
@@ -74,10 +77,7 @@ namespace com
       glm::mat4 model_;
 
       vbo_type vbo_data_;
-      const std::size_t total_verts_ = 4u;
-
       ebo_type ebo_data_;
-      const std::size_t total_elements_ = 6u;
 
       std::string log_tag_;
 

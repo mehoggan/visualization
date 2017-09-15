@@ -81,6 +81,17 @@ namespace com
       ss << "<" << vec3[0] << ", " << vec3[1] << ", " << vec3[2] << ">";
       return ss;
     }
+
+    template <typename T>
+    inline std::stringstream &operator<<(std::stringstream &ss,
+      const std::vector<T> &vec)
+    {
+      for (const T &i : vec) {
+        ss << i << " ";
+      }
+
+      return ss;
+    }
   }
 }
 

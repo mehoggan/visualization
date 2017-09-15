@@ -43,9 +43,11 @@ namespace com
     sphere::~sphere()
     {}
 
-    std::pair<
+    std::tuple<
       sphere::vbo_type::collection_type,
-      sphere::ebo_type::collection_type
+      std::size_t,
+      sphere::ebo_type::collection_type,
+      std::size_t
     > sphere::generate()
     {
       std::vector<vbo_type::datum_type> vector_data = {
@@ -54,19 +56,19 @@ namespace com
           opengl_math::color_rgb<float>(+1.0f, +0.0f, +0.0f)
         ),
         vbo_type::datum_type( // 1
-          opengl_math::point_3d<float>(+1.0f, +0.0f, +0.0f),
+          opengl_math::point_3d<float>(+0.0f, +0.0f, +1.0f),
           opengl_math::color_rgb<float>(+0.0f, +1.0f, +0.0f)
         ),
         vbo_type::datum_type( // 2
-          opengl_math::point_3d<float>(+0.0f, +0.0f, -1.0f),
+          opengl_math::point_3d<float>(+1.0f, +0.0f, +0.0f),
           opengl_math::color_rgb<float>(+0.0f, +0.0f, +1.0f)
         ),
         vbo_type::datum_type( // 3
-          opengl_math::point_3d<float>(-1.0f, +0.0f, +0.0f),
+          opengl_math::point_3d<float>(+0.0f, +0.0f, -1.0f),
           opengl_math::color_rgb<float>(+1.0f, +0.0f, +1.0f)
         ),
         vbo_type::datum_type( // 4
-          opengl_math::point_3d<float>(+0.0f, +0.0f, +1.0f),
+          opengl_math::point_3d<float>(-1.0f, +0.0f, +0.0f),
           opengl_math::color_rgb<float>(+1.0f, +1.0f, +0.0f)
         ),
         vbo_type::datum_type( // 5
@@ -79,28 +81,27 @@ namespace com
       for (std::size_t i = 0; i < vector_data.size(); ++i) {
         data[i] = vector_data[i];
       }
-      data[1] = vector_data[1];
-      data[2] = vector_data[2];
-      data[3] = vector_data[3];
-      data[4] = vector_data[4];
-      data[5] = vector_data[5];
 
       std::vector<uint32_t> vector_indic = {
-        0u, 1u, 4u,
         0u, 1u, 2u,
+        5u, 1u, 2u,
         0u, 3u, 2u,
-        0u, 4u, 3u,
-        4u, 1u, 5u,
-        1u, 2u, 5u,
-        2u, 3u, 5u,
-        3u, 4u, 5u
+        5u, 2u, 3u,
+        0u, 3u, 4u,
+        5u, 3u, 4u,
+        0u, 4u, 1u,
+        5u, 4u, 1u
       };
       ebo_type::collection_type indic(new uint32_t[vector_indic.size()]);
-      for (std::size_t i = 0; i < vector_data.size(); ++i) {
+      for (std::size_t i = 0; i < vector_indic.size(); ++i) {
         indic[i] = vector_indic[i];
       }
 
-      return std::make_pair(data, indic);
+      logging::info(log_tag_, "Generated", vector_indic.size(), "elements");
+      //logging::info(log_tag_, "Vertices =", vector_data);
+      logging::info(log_tag_, "Indices =", vector_indic);
+      return std::make_tuple(data, vector_data.size(), indic,
+        vector_indic.size());
     }
 
     bool sphere::initialize(QOpenGLFunctions &gl_functions)
@@ -115,16 +116,19 @@ namespace com
           throw std::runtime_error("Failed to create program");
         }
 
-        std::pair<
+        std::tuple<
           sphere::vbo_type::collection_type,
-          sphere::ebo_type::collection_type
+          std::size_t,
+          sphere::ebo_type::collection_type,
+          std::size_t
         > sphere_data = generate();
 
         gl_functions.glGenBuffers(1, &vbo_);
         GL_CALL(gl_functions, "glGenBuffers", log_tag_);
         gl_functions.glBindBuffer(GL_ARRAY_BUFFER, vbo_);
         GL_CALL(gl_functions, "glBindBuffer", log_tag_);
-        vbo_data_ = vbo_type(sphere_data.first, total_verts_);
+        vbo_data_ = vbo_type(std::get<0>(sphere_data),
+          std::get<1>(sphere_data));
         std::size_t byte_count = vbo_data_.get_byte_count();
         gl_functions.glBufferData(GL_ARRAY_BUFFER, byte_count,
           vbo_data_.get_data().get(), GL_STATIC_DRAW);
@@ -134,7 +138,8 @@ namespace com
         GL_CALL(gl_functions, "glGenBuffers", log_tag_);
         gl_functions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
         GL_CALL(gl_functions, "glBindBuffer", log_tag_);
-        ebo_data_ = ebo_type(sphere_data.second, total_elements_);
+        ebo_data_ = ebo_type(std::get<2>(sphere_data),
+          std::get<3>(sphere_data));
         byte_count = ebo_data_.get_byte_count();
         gl_functions.glBufferData(GL_ELEMENT_ARRAY_BUFFER, byte_count,
           ebo_data_.get_data().get(), GL_STATIC_DRAW);
@@ -191,7 +196,7 @@ namespace com
     void sphere::draw(QOpenGLFunctions &gl_functions)
     {
       glDrawElements(GL_TRIANGLES, (GLsizei)ebo_data_.get_indices_count(),
-        GL_UNSIGNED_INT, 0);
+        GL_UNSIGNED_INT, (const GLvoid *)0);
       GL_CALL(gl_functions, "glDrawElements", log_tag_);
     }
 
