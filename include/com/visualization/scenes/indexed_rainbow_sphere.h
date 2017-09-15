@@ -73,9 +73,12 @@ namespace com
       std::string log_tag_;
       std::atomic<bool> initialized_;
 
-      glm::vec3 camera_pos_;
-      glm::vec3 camera_at_;
-      float pos_delta_;
+      float radius_;
+      const float pos_delta_;
+      float theta_;
+      const float theta_delta_;
+      float phi_;
+      const float phi_delta_;
     };
   }
 }

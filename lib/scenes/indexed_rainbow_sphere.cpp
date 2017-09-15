@@ -19,11 +19,17 @@ namespace com
       sphere_(new sphere),
       log_tag_(logging::log_tag_for_this(*this)),
       initialized_(false),
-      camera_pos_(0.0f, 0.0f, 10.0f),
-      camera_at_(0.0f, 0.0f, 0.0f),
-      pos_delta_(0.1f)
+      radius_(10.0f),
+      pos_delta_(0.1),
+      theta_(0.0),
+      theta_delta_(0.1),
+      phi_(0.0),
+      phi_delta_(0.1)
     {
       logging::add_std_log_logger(log_tag_, INFO);
+
+      (void)theta_delta_;
+      (void)phi_delta_;
     }
 
     indexed_rainbow_sphere::~indexed_rainbow_sphere()
@@ -56,9 +62,16 @@ namespace com
     {
       sphere_->pre_draw(gl_functions);
 
+      float x = radius_ * std::cos(phi_) * std::cos(theta_);
+      float y = radius_ * std::sin(phi_);
+      float z = radius_ * std::cos(phi_) * std::sin(theta_);
+
+      glm::vec3 camera_pos(x, y, z);
+      glm::vec3 camera_at(0.0f, 0.0f, 0.0f);
+
       view_ = glm::lookAt(
-        camera_pos_,
-        camera_at_,
+        camera_pos,
+        camera_at,
         glm::vec3(+0.0f, +1.0f, +0.0f));
 
       proj_ = glm::perspective(glm::radians(45.0f),
@@ -96,9 +109,8 @@ namespace com
         pixel_delta_y, x, y, xf, yf);
 
       if (y_delta < 0) {
-        camera_pos_[2] -= pos_delta_;
+        radius_ -= pos_delta_;
       } else if (y_delta > 0) {
-        camera_pos_[2] += pos_delta_;
       }
     }
 
@@ -111,19 +123,19 @@ namespace com
 
       switch (key_val) {
       case 16777234: { // Left arrow
-        camera_pos_[0] -= pos_delta_;
+        theta_ -= theta_delta_;
       }
         break;
       case 16777235: { // Up arrow
-        camera_pos_[1] += pos_delta_;
+        phi_ += phi_delta_;
       }
         break;
-      case 16777236: {
-        camera_pos_[0] += pos_delta_;
+      case 16777236: { // Right arrow
+        theta_ += theta_delta_;
       }
         break;
       case 16777237: { // Down arrow
-        camera_pos_[1] -= pos_delta_;
+        phi_ -= phi_delta_;
       }
         break;
       default : {

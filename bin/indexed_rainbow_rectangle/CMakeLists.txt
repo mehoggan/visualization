@@ -18,7 +18,7 @@ set(INDEXED_RAINBOW_RECTANGLE_SRC
   indexed_rainbow_rectangle.cpp
 )
 
-add_executable(visualiztion_visualizer_indexed_rainbow_rectangle
+add_executable(com_visualizer_indexed_rainbow_rectangle
   ${INDEXED_RAINBOW_RECTANGLE_SRC}
 )
 
@@ -29,22 +29,22 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
   )
 else()
   set_target_properties(
-    visualiztion_visualizer_indexed_rainbow_rectangle
+    com_visualizer_indexed_rainbow_rectangle
     PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wall \
     -fno-strict-aliasing -std=c++11"
   )
 endif()
 
-target_link_libraries(visualiztion_visualizer_indexed_rainbow_rectangle
+target_link_libraries(com_visualizer_indexed_rainbow_rectangle
   com_visualization
   ${Boost_LIBRARIES}
 )
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/utils.cmake")
-copy_resources(visualiztion_visualizer_indexed_rainbow_rectangle
+copy_resources(com_visualizer_indexed_rainbow_rectangle
   SOURCE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../../resources/sample.png"
 )
-copy_resources(visualiztion_visualizer_indexed_rainbow_rectangle
+copy_resources(com_visualizer_indexed_rainbow_rectangle
   SOURCE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../../resources/sample2.png"
 )
 

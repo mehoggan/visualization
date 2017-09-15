@@ -53,27 +53,27 @@ namespace com
       std::vector<vbo_type::datum_type> vector_data = {
         vbo_type::datum_type( // 0
           opengl_math::point_3d<float>(+0.0f, -1.0f, +0.0f),
-          opengl_math::color_rgb<float>(+1.0f, +0.0f, +0.0f)
+          opengl_math::color_rgb<float>(+1.0f, +1.0f, +1.0f)
         ),
         vbo_type::datum_type( // 1
           opengl_math::point_3d<float>(+0.0f, +0.0f, +1.0f),
-          opengl_math::color_rgb<float>(+0.0f, +1.0f, +0.0f)
+          opengl_math::color_rgb<float>(+1.0f, +1.0f, +1.0f)
         ),
         vbo_type::datum_type( // 2
           opengl_math::point_3d<float>(+1.0f, +0.0f, +0.0f),
-          opengl_math::color_rgb<float>(+0.0f, +0.0f, +1.0f)
+          opengl_math::color_rgb<float>(+1.0f, +1.0f, +1.0f)
         ),
         vbo_type::datum_type( // 3
           opengl_math::point_3d<float>(+0.0f, +0.0f, -1.0f),
-          opengl_math::color_rgb<float>(+1.0f, +0.0f, +1.0f)
+          opengl_math::color_rgb<float>(+1.0f, +1.0f, +1.0f)
         ),
         vbo_type::datum_type( // 4
           opengl_math::point_3d<float>(-1.0f, +0.0f, +0.0f),
-          opengl_math::color_rgb<float>(+1.0f, +1.0f, +0.0f)
+          opengl_math::color_rgb<float>(+1.0f, +1.0f, +1.0f)
         ),
         vbo_type::datum_type( // 5
           opengl_math::point_3d<float>(+0.0f, +1.0f, +0.0f),
-          opengl_math::color_rgb<float>(+0.0f, +1.0f, +1.0f)
+          opengl_math::color_rgb<float>(+1.0f, +1.0f, +1.0f)
         )
       };
       sphere::vbo_type::collection_type data(
@@ -97,9 +97,6 @@ namespace com
         indic[i] = vector_indic[i];
       }
 
-      logging::info(log_tag_, "Generated", vector_indic.size(), "elements");
-      //logging::info(log_tag_, "Vertices =", vector_data);
-      logging::info(log_tag_, "Indices =", vector_indic);
       return std::make_tuple(data, vector_data.size(), indic,
         vector_indic.size());
     }
