@@ -11,6 +11,7 @@
 #include "opengl_graphics/mesh_types/indices.h"
 #include "opengl_math/primitives/points/type_point_3d.h"
 #include "opengl_math/primitives/colors/type_color_rgb.h"
+#include "opengl_math/primitives/vectors/type_vector_3d.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"

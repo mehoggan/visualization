@@ -4,6 +4,9 @@
 #include "com/visualization/logging.h"
 
 #include "opengl_graphics/mesh_types/datums/interleaved_datum_2d.h"
+#include "opengl_math/math/geometry.h"
+
+#include <limits>
 
 namespace com
 {
@@ -50,48 +53,45 @@ namespace com
       std::size_t
     > sphere::generate()
     {
-      std::vector<vbo_type::datum_type> vector_data = {
-        vbo_type::datum_type( // 0
-          opengl_math::point_3d<float>(+0.0f, -1.0f, +0.0f),
-          opengl_math::color_rgb<float>(+1.0f, +1.0f, +1.0f)
-        ),
-        vbo_type::datum_type( // 1
-          opengl_math::point_3d<float>(+0.0f, +0.0f, +1.0f),
-          opengl_math::color_rgb<float>(+1.0f, +1.0f, +1.0f)
-        ),
-        vbo_type::datum_type( // 2
-          opengl_math::point_3d<float>(+1.0f, +0.0f, +0.0f),
-          opengl_math::color_rgb<float>(+1.0f, +1.0f, +1.0f)
-        ),
-        vbo_type::datum_type( // 3
-          opengl_math::point_3d<float>(+0.0f, +0.0f, -1.0f),
-          opengl_math::color_rgb<float>(+1.0f, +1.0f, +1.0f)
-        ),
-        vbo_type::datum_type( // 4
-          opengl_math::point_3d<float>(-1.0f, +0.0f, +0.0f),
-          opengl_math::color_rgb<float>(+1.0f, +1.0f, +1.0f)
-        ),
-        vbo_type::datum_type( // 5
-          opengl_math::point_3d<float>(+0.0f, +1.0f, +0.0f),
-          opengl_math::color_rgb<float>(+1.0f, +1.0f, +1.0f)
-        )
+      opengl_math::point_3d<float> points[6] = {
+        opengl_math::point_3d<float>(+0.0f, -1.0f, +0.0f),
+        opengl_math::point_3d<float>(+0.0f, +0.0f, +1.0f),
+        opengl_math::point_3d<float>(+1.0f, +0.0f, +0.0f),
+        opengl_math::point_3d<float>(+0.0f, +0.0f, -1.0f),
+        opengl_math::point_3d<float>(-1.0f, +0.0f, +0.0f),
+        opengl_math::point_3d<float>(+0.0f, +1.0f, +0.0f)
       };
+      std::vector<opengl_math::triangle<float>> dodecahedron_tris = {
+        opengl_math::triangle<float>(points[0], points[1], points[2]),
+        opengl_math::triangle<float>(points[5], points[1], points[2]),
+        opengl_math::triangle<float>(points[0], points[3], points[2]),
+        opengl_math::triangle<float>(points[5], points[2], points[3]),
+        opengl_math::triangle<float>(points[0], points[3], points[4]),
+        opengl_math::triangle<float>(points[5], points[3], points[4]),
+        opengl_math::triangle<float>(points[0], points[4], points[1]),
+        opengl_math::triangle<float>(points[5], points[4], points[1])
+      };
+      std::uint32_t current_index = 0;
+      opengl_math::subdivided_tessellated_triangle_data<float, std::uint32_t>
+        output;
+      const std::size_t subdivisions = 6;
+      opengl_math::tessellate_triangles_by_subdivision<float>(
+        dodecahedron_tris, subdivisions, current_index, output);
+
+      std::vector<vbo_type::datum_type> vector_data(output._points.size());
+      std::size_t index = 0;
+      for (const opengl_math::point_3d<float> &p : output._points) {
+        vector_data[index] = (vbo_type::datum_type(
+          p, opengl_math::color_rgb<float>(+1.0f, +0.0f, +0.0f)));
+        ++index;
+      }
+
+      std::vector<std::uint32_t> &vector_indic = output._indices;
       sphere::vbo_type::collection_type data(
         new vbo_type::datum_type[vector_data.size()]);
       for (std::size_t i = 0; i < vector_data.size(); ++i) {
         data[i] = vector_data[i];
       }
-
-      std::vector<uint32_t> vector_indic = {
-        0u, 1u, 2u,
-        5u, 1u, 2u,
-        0u, 3u, 2u,
-        5u, 2u, 3u,
-        0u, 3u, 4u,
-        5u, 3u, 4u,
-        0u, 4u, 1u,
-        5u, 4u, 1u
-      };
       ebo_type::collection_type indic(new uint32_t[vector_indic.size()]);
       for (std::size_t i = 0; i < vector_indic.size(); ++i) {
         indic[i] = vector_indic[i];
