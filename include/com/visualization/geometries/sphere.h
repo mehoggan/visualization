@@ -36,7 +36,7 @@ namespace com
       public geometry
     {
     public:
-      sphere();
+      explicit sphere(float radius = 1.0f);
       virtual ~sphere();
 
       virtual bool initialize(QOpenGLFunctions &gl_functions);
@@ -79,6 +79,8 @@ namespace com
 
       vbo_type vbo_data_;
       ebo_type ebo_data_;
+
+      float radius_;
 
       std::string log_tag_;
 
