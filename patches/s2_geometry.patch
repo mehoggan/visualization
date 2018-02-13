@@ -1,0 +1,16 @@
+diff --git a/geometry/util/math/exactfloat/exactfloat.h b/geometry/util/math/exactfloat/exactfloat.h
+index 802bf50..cb2d6ca 100644
+--- a/geometry/util/math/exactfloat/exactfloat.h
++++ b/geometry/util/math/exactfloat/exactfloat.h
+@@ -556,9 +556,9 @@ class ExactFloat {
+ };
+ 
+ inline std::unique_ptr<BIGNUM, BIGNUM_deleter> make_BN_new() {
+-  std::unique_ptr<BIGNUM, BIGNUM_deleter> ret(BN_new(), BIGNUM_deleter{});
++  std::unique_ptr<BIGNUM, BIGNUM_deleter> ret(BN_new(), BIGNUM_deleter());
+   // guarantee(ret.get() != nullptr);
+-  return ret;
++  return std::move(ret);
+ }
+ 
+ /////////////////////////////////////////////////////////////////////////

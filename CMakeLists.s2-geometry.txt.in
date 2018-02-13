@@ -9,6 +9,7 @@ ExternalProject_Add(
   GIT_TAG master
   SOURCE_DIR "${CMAKE_BINARY_DIR}/s2-geometry-src"
   BINARY_DIR "${CMAKE_BINARY_DIR}/s2-geometry-build"
+  PATCH_COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/patches/git_s2_geometry_apply.sh"
   CONFIGURE_COMMAND ""
   BUILD_COMMAND ""
   INSTALL_COMMAND ""

@@ -18,8 +18,10 @@ option(
 )
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-  set(OPENSSL_ROOT_DIR "/usr/local/Cellar/openssl/1.0.2k")
-  set(OPENSSL_LIB_DIR "/usr/local/Cellar/openssl/1.0.2k/lib")
+  message(STATUS "Setting up OpenSSL for OSX build.")
+  set(OPENSSL_ROOT_DIR "/usr/local/Cellar/openssl/1.0.2m")
+  set(OPENSSL_LIBRARIES "/usr/local/Cellar/openssl/1.0.2m/lib")
+  set(OPENSSL_INCLUDE_DIR "/usr/local/Cellar/openssl/1.0.2m/include")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
   set(OPENSSL_ROOT_DIR "/usr/lib/ssl/")
   set(OPENSSL_LIB_DIR "/usr/local/lib/ssl")

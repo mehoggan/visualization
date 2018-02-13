@@ -38,7 +38,6 @@ namespace com
       vbo_(0),
       ebo_(0),
       model_(1.0f),
-      radius_(radius),
       log_tag_(logging::log_tag_for_this(*this)),
       initialized_(false)
     {
@@ -55,58 +54,12 @@ namespace com
       std::size_t
     > sphere::generate()
     {
-      opengl_math::point_3d<float> points[6] = {
-        opengl_math::point_3d<float>(+0.0f, -1.0f, +0.0f),
-        opengl_math::point_3d<float>(+0.0f, +0.0f, +1.0f),
-        opengl_math::point_3d<float>(+1.0f, +0.0f, +0.0f),
-        opengl_math::point_3d<float>(+0.0f, +0.0f, -1.0f),
-        opengl_math::point_3d<float>(-1.0f, +0.0f, +0.0f),
-        opengl_math::point_3d<float>(+0.0f, +1.0f, +0.0f)
-      };
-      std::vector<opengl_math::triangle<float>> octahedron_tris = {
-        opengl_math::triangle<float>(points[0], points[1], points[2]),
-        opengl_math::triangle<float>(points[5], points[1], points[2]),
-        opengl_math::triangle<float>(points[0], points[3], points[2]),
-        opengl_math::triangle<float>(points[5], points[2], points[3]),
-        opengl_math::triangle<float>(points[0], points[3], points[4]),
-        opengl_math::triangle<float>(points[5], points[3], points[4]),
-        opengl_math::triangle<float>(points[0], points[4], points[1]),
-        opengl_math::triangle<float>(points[5], points[4], points[1])
-      };
-      std::uint32_t current_index = 0;
-      opengl_math::subdivided_tessellated_triangle_data<float, std::uint32_t>
-        output;
-      const std::size_t subdivisions = 1;
-      opengl_math::tessellate_triangles_by_midpoint_subdivision<float>(
-        octahedron_tris, subdivisions, current_index, output);
-
-      std::vector<vbo_type::datum_type> vector_data(output._points.size());
-      std::size_t index = 0;
-      for (opengl_math::point_3d<float> &p : output._points) {
-        // TODO: Transform p to be on sphere.
-        opengl_math::vector_3d<float> u(p.x(), p.y(), p.z());
-        float mag = u.magnitude();
-        opengl_math::vector_3d<float> t = (radius_ / mag) * u;
-        u = t + u;
-        opengl_math::point_3d<float> p0(u.x(), u.y(), u.z());
-        vector_data[index] = (vbo_type::datum_type(
-          p0, opengl_math::color_rgb<float>(+1.0f, +0.0f, +0.0f)));
-        ++index;
-      }
-
-      std::vector<std::uint32_t> &vector_indic = output._indices;
-      sphere::vbo_type::collection_type data(
-        new vbo_type::datum_type[vector_data.size()]);
-      for (std::size_t i = 0; i < vector_data.size(); ++i) {
-        data[i] = vector_data[i];
-      }
-      ebo_type::collection_type indic(new uint32_t[vector_indic.size()]);
-      for (std::size_t i = 0; i < vector_indic.size(); ++i) {
-        indic[i] = vector_indic[i];
-      }
-
-      return std::make_tuple(data, vector_data.size(), indic,
-        vector_indic.size());
+      return std::make_tuple<
+        sphere::vbo_type::collection_type,
+        std::size_t,
+        sphere::ebo_type::collection_type,
+        std::size_t
+      >({}, 0ull, {}, 0ull);
     }
 
     bool sphere::initialize(QOpenGLFunctions &gl_functions)
